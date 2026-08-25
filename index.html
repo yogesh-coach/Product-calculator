@@ -366,13 +366,13 @@ document.getElementById('searchBox').addEventListener('input', e => {
   });
   document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
 });
-
-document.getElementById('clearBtn').addEventListener('click', () => {
-  document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
-  recalcAll();
-});
-<script>
-if ("serviceWorker" in navigator) {
+ document.getElementById('clearBtn').addEventListener('click', () => {
+   document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
+   recalcAll();
+ });
+ </script>
+ <script>
+ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js");
   });
