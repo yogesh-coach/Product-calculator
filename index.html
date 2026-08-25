@@ -100,11 +100,23 @@
   .price-cell{font-weight:600;color:var(--forest-deep);}
   .line-total{font-weight:700;color:var(--mint-dark);}
   .qty-input{
-    width:52px;padding:6px 4px;text-align:center;border-radius:8px;
-    border:1.5px solid var(--line);font-size:13px;font-family:'Inter',sans-serif;
-    font-variant-numeric:tabular-nums;
+    width:38px;padding:6px 2px;text-align:center;border:none;
+    font-size:13px;font-family:'Inter',sans-serif;
+    font-variant-numeric:tabular-nums;background:transparent;
   }
-  .qty-input:focus{outline:none;border-color:var(--mint-dark);}
+  .qty-input:focus{outline:none;}
+  .qty-stepper{
+    display:inline-flex;align-items:center;border:1.5px solid var(--line);
+    border-radius:8px;overflow:hidden;background:var(--card);
+  }
+  .qty-btn{
+    width:26px;height:28px;border:none;background:var(--mint-pale);
+    color:var(--forest-deep);font-size:15px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;line-height:1;user-select:none;
+  }
+  .qty-btn:hover{background:var(--mint);color:#fff;}
+  .qty-btn:active{background:var(--mint-dark);}
   .mrp-cell{color:var(--ink-soft);text-decoration:line-through;font-size:12.5px;}
 
   .summary{
@@ -266,7 +278,13 @@ function buildRows(){
       <td class="vp-cell">${p.vp}</td>
       <td class="mrp-cell">${fmt(p.mrp)}</td>
       <td class="price-cell price-val" data-idx="${i}">${fmt(p[currentTier])}</td>
-      <td><input type="number" min="0" step="1" value="0" class="qty-input" data-idx="${i}"></td>
+      <td>
+        <div class="qty-stepper">
+          <button type="button" class="qty-btn minus" data-idx="${i}">−</button>
+          <input type="number" min="0" step="1" value="0" class="qty-input" data-idx="${i}">
+          <button type="button" class="qty-btn plus" data-idx="${i}">+</button>
+        </div>
+      </td>
       <td class="line-total" data-idx="${i}">${fmt(0)}</td>
     </tr>
   `).join('');
@@ -317,6 +335,18 @@ document.getElementById('tierGroup').addEventListener('click', e => {
 
 tbody.addEventListener('input', e => {
   if(e.target.classList.contains('qty-input')) recalcAll();
+});
+
+tbody.addEventListener('click', e => {
+  const btn = e.target.closest('.qty-btn');
+  if(!btn) return;
+  const i = btn.dataset.idx;
+  const input = tbody.querySelector(`.qty-input[data-idx="${i}"]`);
+  let val = parseInt(input.value) || 0;
+  if(btn.classList.contains('plus')) val++;
+  else val = Math.max(0, val - 1);
+  input.value = val;
+  recalcAll();
 });
 
 document.getElementById('searchBox').addEventListener('input', e => {
