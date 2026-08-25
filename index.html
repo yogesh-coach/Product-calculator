@@ -294,8 +294,10 @@ function buildRows(){
       </td>
       <td class="line-total" data-idx="${i}">${fmt(0)}</td>
     </tr>
-  `).join('');
+   ).join('');
 }
+
+buildRows();
 
 function updatePriceColumn(){
   document.getElementById('priceHeader').textContent = tierLabels[currentTier];
