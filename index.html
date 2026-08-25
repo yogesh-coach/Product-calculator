@@ -371,6 +371,12 @@ document.getElementById('clearBtn').addEventListener('click', () => {
   document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
   recalcAll();
 });
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
 </script>
 
 </body>
