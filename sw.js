@@ -1,9 +1,11 @@
-const CACHE_NAME = "gs-nutrition-center-v2";
+const CACHE_NAME = "gs-nutrition-center-v3";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -32,8 +34,8 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
     })
   );
 });
