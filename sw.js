@@ -1,4 +1,4 @@
-const CACHE_NAME = "gs-nutrition-center-v1";
+const CACHE_NAME = "gs-nutrition-center-v2";
 
 const FILES_TO_CACHE = [
   "./",
@@ -12,6 +12,8 @@ self.addEventListener("install", event => {
       return cache.addAll(FILES_TO_CACHE);
     })
   );
+
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
@@ -24,12 +26,14 @@ self.addEventListener("activate", event => {
       )
     )
   );
+
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
